@@ -2,7 +2,7 @@
 # To Do List - Grupo 3
 #### Grupo: Caio de Castro Notini, Lívia Alves Ferreira e Luigi Louback de Oliveira
 
-Este primeiro TP da disciplina de AEDS III trata-se da criação de uma lista de tarefas, mais especificamente da implementação de seu CRUD(Create, Read, Update e Delete). 
+O trabalho consiste na implementação de um CRUD para um sistema de lista de tarefas. A base desse sistema é a classe [Tarefa](https://github.com/CaioNotini/AEDS3/blob/master/TP1/aed3/Tarefa.java), que define os atributos principais de uma tarefa, como nome, data de criação, data de conclusão, status e prioridade. Além disso, cada tarefa tem um ID exclusivo e os dados são gerenciados utilizando um vetor de bytes, permitindo a serialização dos registros para armazenamento em arquivos. Os arquivos contêm informações adicionais, como lápide (indicando se o registro foi excluído) e o tamanho do registro, facilitando a manipulação e a persistência dos dados. Todo o trabalho gira em torno dessa estrutura, assegurando que as operações de criação, leitura, atualização e exclusão sejam realizadas de forma eficiente.
 
 ### Descrição dos Métodos:
 ***Arquivos*** \
