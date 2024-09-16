@@ -12,10 +12,6 @@ public class IO {
 
         int id1, id2, id3, id4;
         
-        (new File(".\\dados\\tarefas.db")).delete();
-        (new File(".\\dados\\tarefas.hash_d.db")).delete();
-        (new File(".\\dados\\tarefas.hash_c.db")).delete();
-
         Tarefa t1 = new Tarefa(1, "Revisar código", LocalDate.of(2024, 9, 3), LocalDate.of(2024, 9, 4), "Em andamento", 0);
         Tarefa t2 = new Tarefa(2, "Documentar projeto", LocalDate.of(2024, 9, 2), LocalDate.of(2024, 9, 5), "Pendente", 1);
         Tarefa t3 = new Tarefa(3, "Testar integração", LocalDate.of(2024, 8, 30), LocalDate.of(2024, 9, 6), "Concluído", 1);
