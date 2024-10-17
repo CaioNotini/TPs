@@ -7,7 +7,6 @@ import java.lang.reflect.Constructor;
 
 public class Arquivos<T extends Registro> {
 
-    int a = 0;
     RandomAccessFile arquivo;
     String nomeArquivo;
     final int TAM_CABECALHO = 4;
@@ -65,10 +64,14 @@ public class Arquivos<T extends Registro> {
         byte lapide;
         T entidade = this.construtor.newInstance();
 
+
+        //Le o indice no arquivo de indice direto
         ParIDEndereco pie = indiceDireto.read(id);
         if(pie!=null) {
+            //Le o endereco do registro no indice direto e vai para sua posicao no arquivo de dados
             arquivo.seek(pie.getEndereco());
             lapide = arquivo.readByte();
+            //Le o registro e retorna o registro no formato de entidade generica
             if(lapide==' ') {
                 tam = arquivo.readShort();
                 b = new byte[tam];
@@ -89,18 +92,24 @@ public class Arquivos<T extends Registro> {
         byte lapide;
         T entidade = this.construtor.newInstance();
         
+        //Le o par ID e Endereco no arquivo de Indice Direto
         ParIDEndereco pie = indiceDireto.read(id);
         if(pie!=null) {
+            //Vai para o endereco do Indice no arquivo de dados
             arquivo.seek(pie.getEndereco());
             lapide = arquivo.readByte();
+            //Faz a leitura do registro
             if(lapide==' ') {               
                 tam = arquivo.readShort();
                 b = new byte[tam];
                 arquivo.read(b);
                 entidade.fromByteArray(b);
+                //Remove o registro mudando a lapide e o remove no indice
                 if(entidade.getId()==id) {
                     arquivo.seek(pie.getEndereco());
                     arquivo.writeByte('*');
+
+                    //Delta o ID deletado no Indice Direto
                     indiceDireto.delete(id);
                     return true;
                 }
@@ -116,21 +125,29 @@ public class Arquivos<T extends Registro> {
         byte[] b;
         byte lapide;
         T entidade = this.construtor.newInstance();
+
+        //Leitura do par ID endereço no arquivo de Indice Direto
         ParIDEndereco pie = indiceDireto.read(novaEntidade.getId());
         if(pie != null) {
             arquivo.seek(pie.getEndereco());
             lapide = arquivo.readByte();
+
+            //Leitura do registro
             if(lapide==' ') {                
                 tam = arquivo.readShort();
                 b = new byte[tam];
                 arquivo.read(b);
                 entidade.fromByteArray(b);
                 if(entidade.getId()==novaEntidade.getId()) {
+                    //Leitura e Atualizacao da nova entidade
                     byte[] b2 = novaEntidade.toByteArray();
                     int tam2 = b2.length;
+                    //Se o tam da novaEntidade <= antiga ==> escreve no mesmo lugar 
                     if(tam2<=tam){
                         arquivo.seek(pie.getEndereco()+3);
                         arquivo.write(b2);
+
+                    //Se o tam da novaEntidade > antiga ==> "deleta" a entidade antiga e escreve a nova no final do arquivo
                     } else {
                         arquivo.seek(pie.getEndereco());
                         arquivo.writeByte('*');  
@@ -139,6 +156,8 @@ public class Arquivos<T extends Registro> {
                         arquivo.writeByte(' ');
                         arquivo.writeShort(tam2);
                         arquivo.write(b2); 
+
+                        //Atualiza o Indice Direto para o novo endereço, no mesmo ID
                         indiceDireto.update(new ParIDEndereco(novaEntidade.getId(), novoEndereco));                     
                     }
                     return true;
