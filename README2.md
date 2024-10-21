@@ -50,8 +50,10 @@ Este segundo TP da disciplina de AEDS III trata-se da implementação de uma ár
 
 ### Perguntas
 **O CRUD (com índice direto) de categorias foi implementado?** \
+Sim.
 
 **Há um índice indireto de nomes para as categorias?** \
+Sim.
 
 **O atributo de ID de categoria, como chave estrangeira, foi criado na classe Tarefa?**\
 Sim.
