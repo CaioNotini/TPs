@@ -43,7 +43,7 @@ Este segundo TP da disciplina de AEDS III trata-se da implementação de uma ár
 ***Categoria*** \
 **public Categoria():** construtor. \
 **public Categoria(String n):** construtor. \
-**public Categoria(int i, String n):** construtor. \
+**public Categoria(int i, String n):** construtor. 
 
 ***ArvoreBMais*** \
 
