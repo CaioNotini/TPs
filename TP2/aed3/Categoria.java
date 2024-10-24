@@ -24,6 +24,14 @@ public class Categoria implements Registro {
         this.nome_categoria = n;
         }
 
+    public void setNome(String nome) {
+        this.nome_categoria = nome;
+    }
+
+    public String getNome() {
+        return nome_categoria;
+    }
+
     public void setId(int id) {
         this.id_categoria = id;
     }
