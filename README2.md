@@ -46,6 +46,12 @@ Este segundo TP da disciplina de AEDS III trata-se da implementação de uma ár
 **public Categoria(int i, String n):** construtor. 
 
 ***ArvoreBMais*** \
+**public ArvoreBMais(Constructor ct, int ordem):** construtor da árvore B+. \
+**public void create(T elem):** insere um novo elemento na árvore B+. \
+**public T read(int chave):** recupera um elemento da árvore B+ com base na chave fornecida. \
+**public void update(T elem):** atualiza um elemento existente na árvore B+. \
+**public void delete(int chave):** deleta um elemento da árvore B+ de acordo com a chave fornecida. \
+**public List<T> list(int idCategoria):** lista todas as tarefas associadas a uma categoria específica.
 
 
 ### Perguntas
@@ -59,6 +65,7 @@ Sim.
 Sim.
 
 **Há uma árvore B+ que registre o relacionamento 1:N entre tarefas e categorias?**\
+Sim.
 
 **É possível listar as tarefas de uma categoria?**\
 Sim.
@@ -73,6 +80,7 @@ Sim.
 Sim.
 
 **O trabalho está completo?**\
+Sim.
 
 **O trabalho é original e não a cópia de um trabalho de outro grupo?**\
 Sim, o trabalho é original.
