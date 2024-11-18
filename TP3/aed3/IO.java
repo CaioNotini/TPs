@@ -1,11 +1,11 @@
 package aed3;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
-import java.io.File;
 
 public class IO {
 
@@ -21,8 +21,9 @@ public class IO {
             }
 
             // Inicializa o arquivo de tarefas e categorias dentro da pasta "dados"
-             ArquivoTarefas arqTarefas = new ArquivoTarefas("tarefas.db", "dados/arvoreTarefas.db");
-             ArquivoCategorias arqCategorias = new ArquivoCategorias("categorias.db", "dados/arvoreCategoria.db");
+            ArquivoTarefas arqTarefas = new ArquivoTarefas("tarefas.db", "dados/arvoreTarefas.db");
+            ArquivoCategorias arqCategorias = new ArquivoCategorias("categorias.db", "dados/arvoreCategoria.db");
+            ArquivoRotulos arqRotulos = new ArquivoRotulos("rotulos.db", "dados/arvoreRotulos.db");
 
 
             int opcao;
@@ -32,6 +33,7 @@ public class IO {
                 System.out.println("-------------------------------");
                 System.out.println("1 - Tarefa");
                 System.out.println("2 - Categoria");
+                System.out.println("3 - Rótulo");
                 System.out.println("0 - Sair");
                 try {
                     opcao = Integer.parseInt(console.nextLine());
@@ -241,6 +243,87 @@ public class IO {
                     } while (o != 0);
                     break;
 
+                    case 3:
+                        int opcao3;
+                        do {
+                            System.out.println("\n\n-------------------------------");
+                            System.out.println("              RÓTULO");
+                            System.out.println("-------------------------------");
+                            System.out.println("1 - Inserir");
+                            System.out.println("2 - Buscar");
+                            System.out.println("3 - Excluir");
+                            System.out.println("4 - Listar todas");
+                            System.out.println("0 - Sair");
+                            try {
+                                opcao3 = Integer.parseInt(console.nextLine());
+                            } catch (NumberFormatException e) {
+                                opcao3 = -1;
+                            }
+
+                            switch (opcao3) {
+                                case 1 -> {
+                                    System.out.println("\nINCLUSÃO");
+                                    String nome;
+                                    try {
+                                        System.out.print("Nome: ");
+                                        nome = console.nextLine();
+                                        Rotulo novoRotulo = new Rotulo(nome);
+                                        int idNovoRotulo = arqRotulos.create(novoRotulo);
+                                        System.out.println("Rótulo inserido com ID: " + idNovoRotulo);
+                                    } catch (Exception e) {
+                                        System.out.println("Dados inválidos!");
+                                        break;
+                                    }
+                                }
+                                case 2 -> {
+                                    System.out.println("\nBUSCA");
+                                    System.out.print("Nome: ");
+                                    String nome = console.nextLine();
+                                    Rotulo rotuloEncontrado = arqRotulos.buscarPorNome(nome);
+                                    if (rotuloEncontrado != null) {
+                                        System.out.println("Categoria encontrada: " + rotuloEncontrado);
+                                    } else {
+                                        System.out.println("Categoria não encontrada!");
+                                    }
+                                }
+                                case 3 -> {
+                                    System.out.println("\nEXCLUSÃO");
+                                    ArrayList<Rotulo> rotulos = arqRotulos.listarRotulos();
+                                    rotulos.sort(Comparator.comparing(Rotulo::getNome));
+
+                                    for (int i = 0; i < rotulos.size(); i++) {
+                                        System.out.println((i + 1) + " - " + rotulos.get(i).getNome());
+                                    }
+
+                                    int escolhaRotulo;
+                                    while (true) {
+                                        System.out.print("numero: ");
+                                        escolhaRotulo = Integer.parseInt(console.nextLine()) - 1;
+                                        if (escolhaRotulo >= 0 && escolhaRotulo < rotulos.size()) {
+                                            break;
+                                        }
+                                        System.out.println("Opção inválida. Tente novamente.");
+                                    }
+
+                                    int id = rotulos.get(escolhaRotulo).getId();
+                                    boolean excluida = arqRotulos.delete(id);
+                                    if (excluida) {
+                                        System.out.println("Rótulo excluído com sucesso!");
+                                    } else {
+                                        System.out.println("Rótulo não encontrado ou erro ao excluir.");
+                                    }
+                                }
+                                case 4 -> {
+                                    System.out.println("\nLISTA COMPLETA");
+                                    ArrayList<Rotulo> lista = arqRotulos.listarRotulos();
+                                    lista.forEach(System.out::println);
+                                }
+                                case 0 -> System.out.println("Voltando ao menu principal...");
+                                default -> System.out.println("Opção inválida");
+                            }
+
+                        } while(opcao3 != 0);
+                    break;
 
                     case 0:
                         System.out.println("Encerrando o programa...");
