@@ -4,8 +4,10 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
+import java.text.Normalizer;
 
 public class IO {
 
@@ -21,7 +23,7 @@ public class IO {
             }
 
             // Inicializa o arquivo de tarefas e categorias dentro da pasta "dados"
-            ArquivoTarefas arqTarefas = new ArquivoTarefas("tarefas.db", "dados/arvoreTarefas.db");
+            ArquivoTarefas arqTarefas = new ArquivoTarefas("tarefas.db", "dados/arvoreTarefas.db","dados/dicionario.listainv.db","dados/blocos.listainv.db");
             ArquivoCategorias arqCategorias = new ArquivoCategorias("categorias.db", "dados/arvoreCategoria.db");
             ArquivoRotulos arqRotulos = new ArquivoRotulos("rotulos.db", "dados/arvoreRotulos.db");
 
@@ -69,16 +71,25 @@ public class IO {
                             }
 
                             case 2 -> {
-                                System.out.println("\nBuscar tarefa por ID:");
-                                System.out.print("Digite o ID da tarefa: ");
-                                int idBuscar = Integer.parseInt(console.nextLine());
-                                t = arqTarefas.read(idBuscar);
-                                if (t != null) {
-                                    System.out.println("Tarefa encontrada:");
-                                    System.out.println(t);
-                                } else {
-                                    System.out.println("Tarefa não encontrada!");
+                                System.out.println("\nBuscar tarefa por termos relacionados:");
+                                System.out.print("Digite uma tarefa: ");
+                                String chave = console.nextLine();
+                               chave=Normalizer.normalize(chave, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toLowerCase();
+                                ElementoLista[]resultadoFinal=arqTarefas.buscarTarefasPorFrase(chave);
+                                 Arrays.sort(resultadoFinal, (e1, e2) -> Float.compare(e2.getFrequencia(), e1.getFrequencia()));
+                                for(int i=0;i<resultadoFinal.length && i<10;i++){
+                                    if(resultadoFinal[i]!=null){
+                                        int idBuscar=resultadoFinal[i].getId();
+                                        t  = arqTarefas.read(idBuscar);
+                                        if (t != null) {
+                                            System.out.println("Tarefa encontrada:");
+                                            System.out.println(t);
+                                            } 
+                                    }
+                                      
                                 }
+                              
+                                
                             }
 
                             case 3 -> {
