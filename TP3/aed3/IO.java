@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
-import java.text.Normalizer;
+
 
 public class IO {
 
@@ -74,7 +74,7 @@ public class IO {
                                 System.out.println("\nBuscar tarefa por termos relacionados:");
                                 System.out.print("Digite uma tarefa: ");
                                 String chave = console.nextLine();
-                               chave=Normalizer.normalize(chave, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toLowerCase();
+                              
                                 ElementoLista[]resultadoFinal=arqTarefas.buscarTarefasPorFrase(chave);
                                  Arrays.sort(resultadoFinal, (e1, e2) -> Float.compare(e2.getFrequencia(), e1.getFrequencia()));
                                 for(int i=0;i<resultadoFinal.length && i<10;i++){

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.text.Normalizer;
 
 public class ArquivoTarefas extends Arquivos<Tarefa> {
@@ -61,10 +62,30 @@ public class ArquivoTarefas extends Arquivos<Tarefa> {
     @Override
     public boolean update(Tarefa tarefa) throws Exception {
         Tarefa tarefaAntiga = super.read(tarefa.getId());
-        if (tarefaAntiga != null && tarefaAntiga.getIdCategoria() != tarefa.getIdCategoria()) {
-
+    
+            if (tarefaAntiga != null && (!tarefaAntiga.nome.equals(tarefa.nome) ||  tarefaAntiga.getIdCategoria() != tarefa.getIdCategoria())) {
             arvore.delete(new ParIdId(tarefaAntiga.getIdCategoria(), tarefaAntiga.getId()));
+
+            List<String> listasemStop = carregarStopwords(tarefaAntiga.nome);  
+        LinkedHashSet<String> set = new LinkedHashSet<>(listasemStop);  
+        for (String palavra : set) {
+            lista.delete(palavra, tarefaAntiga.id);  
+        }
            
+        List<String> listasemStop2 = carregarStopwords(tarefa.nome);
+        float[] frequenciaPalavras = calcularFrequencia(listasemStop2);
+        LinkedHashSet<String> set2 = new LinkedHashSet<>();
+         for (String palavra : listasemStop2) {
+             set2.add(palavra);  
+         }
+ 
+         List<String> listaPalavras = new ArrayList<>(set2);
+          for(int i=0;i<frequenciaPalavras.length;i++){
+              lista.create(listaPalavras.get(i), new ElementoLista(tarefa.id, frequenciaPalavras[i]));
+             }
+
+
+
             arvore.create(new ParIdId(tarefa.getIdCategoria(), tarefa.getId()));
         }
         return super.update(tarefa); 
@@ -93,7 +114,7 @@ public class ArquivoTarefas extends Arquivos<Tarefa> {
             while ((linha = br.readLine()) != null) {
                 stopwords.add(linha.trim());
             }
-            String nome = Normalizer.normalize(tarefa, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toLowerCase();
+            String nome = transforma(tarefa);
             String[] nomes =nome.split(" ");
             
             for (String palavra : nomes) {
@@ -129,7 +150,7 @@ public class ArquivoTarefas extends Arquivos<Tarefa> {
  
 
       public ElementoLista[] buscarTarefasPorFrase(String frase) throws Exception {
-        frase = Normalizer.normalize(frase, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toLowerCase();
+        frase = transforma(frase);
         List<String> chaves = carregarStopwords(frase);
         List<ElementoLista[]> resultados = new ArrayList<>();
     
@@ -167,6 +188,11 @@ public class ArquivoTarefas extends Arquivos<Tarefa> {
         Collections.sort(resultadoFinal);
         return resultadoFinal.toArray(new ElementoLista[0]);
     }
+     public static String transforma(String str) {
+    String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
+    Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+    return pattern.matcher(nfdNormalizedString).replaceAll("").toLowerCase();
+  }
     
     
 }
