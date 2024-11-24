@@ -3,17 +3,21 @@ package aed3;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.*;
 import java.util.regex.Pattern;
-import java.text.Normalizer;
 
 public class ArquivoTarefas extends Arquivos<Tarefa> {
     private ArvoreBMais<ParIdId> arvore; 
+    private ArvoreBMais<ParIdRotuloIdTarefa> arvoreR;
+    private ArvoreBMais<ParIdTarefaIdRotulo> arvoreT;
     private  ListaInvertida lista;
 
-    public ArquivoTarefas(String nomeArquivo, String nomeArvore,String arquivoLista,String arquivoBloco) throws Exception {
+    public ArquivoTarefas(String nomeArquivo, String nomeArvore,String arquivoLista,String arquivoBloco, String arvoreTarefas, String arvoreRotulos) throws Exception {
         super(nomeArquivo, Tarefa.class.getConstructor());  
         arvore = new ArvoreBMais<>(ParIdId.class.getConstructor(), 5, nomeArvore);
+        arvoreR = new ArvoreBMais<>(ParIdRotuloIdTarefa.class.getConstructor(), 5, arvoreRotulos);
+        arvoreT= new ArvoreBMais<>(ParIdTarefaIdRotulo.class.getConstructor(), 5, arvoreTarefas);
         lista = new ListaInvertida(4, arquivoLista, arquivoBloco); 
     }
 
@@ -23,9 +27,16 @@ public class ArquivoTarefas extends Arquivos<Tarefa> {
         tarefa.setId(id);  
 
         arvore.create(new ParIdId(tarefa.getIdCategoria(), id));
-       List<String> listasemStop = carregarStopwords(tarefa.nome);
-       float[] frequenciaPalavras = calcularFrequencia(listasemStop);
-       LinkedHashSet<String> set = new LinkedHashSet<>();
+        for (Integer idRotulo : tarefa.getListaRotulos()) {
+            arvoreT.create(new ParIdTarefaIdRotulo(id, idRotulo));
+        }
+        for (Integer idR : tarefa.getListaRotulos()) {
+            arvoreR.create(new ParIdRotuloIdTarefa(idR, id));
+        }
+        
+        List<String> listasemStop = carregarStopwords(tarefa.nome);
+        float[] frequenciaPalavras = calcularFrequencia(listasemStop);
+        LinkedHashSet<String> set = new LinkedHashSet<>();
         for (String palavra : listasemStop) {
             set.add(palavra);  
         }
@@ -46,6 +57,15 @@ public class ArquivoTarefas extends Arquivos<Tarefa> {
         Tarefa tarefa = super.read(id);  
         if (tarefa != null) {
             arvore.delete(new ParIdId(tarefa.getIdCategoria(), id));
+
+            for (Integer idRotulo : tarefa.getListaRotulos()) {
+                arvoreT.delete(new ParIdTarefaIdRotulo(id, idRotulo));
+            }
+
+            for (Integer idR : tarefa.getListaRotulos()) {
+                arvoreR.delete(new ParIdRotuloIdTarefa(idR, id));
+            }
+
             lista.decrementaEntidades();
 
         List<String> listasemStop = carregarStopwords(tarefa.nome);  
@@ -96,6 +116,20 @@ public class ArquivoTarefas extends Arquivos<Tarefa> {
 
         ArrayList<ParIdId> listaIds = arvore.read(new ParIdId(idCategoria, -1));
         for (ParIdId parIdId : listaIds) {
+            Tarefa tarefa = super.read(parIdId.getIdTarefa());
+            if (tarefa != null) {
+                listaTarefas.add(tarefa);
+            }
+        }
+
+        return listaTarefas;
+    }
+
+    public ArrayList<Tarefa> buscarPorRotulo(int idRotulo) throws Exception {
+        ArrayList<Tarefa> listaTarefas = new ArrayList<>();
+
+        ArrayList<ParIdRotuloIdTarefa> listaIds = arvoreR.read(new ParIdRotuloIdTarefa(idRotulo, -1));
+        for (ParIdRotuloIdTarefa parIdId : listaIds) {
             Tarefa tarefa = super.read(parIdId.getIdTarefa());
             if (tarefa != null) {
                 listaTarefas.add(tarefa);

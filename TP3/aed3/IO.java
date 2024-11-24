@@ -23,7 +23,7 @@ public class IO {
             }
 
             // Inicializa o arquivo de tarefas e categorias dentro da pasta "dados"
-            ArquivoTarefas arqTarefas = new ArquivoTarefas("tarefas.db", "dados/arvoreTarefas.db","dados/dicionario.listainv.db","dados/blocos.listainv.db");
+            ArquivoTarefas arqTarefas = new ArquivoTarefas("tarefas.db", "dados/arvoreTarefas.db","dados/dicionario.listainv.db","dados/blocos.listainv.db", "dados/arvoreTR", "dados/arvoreRT");
             ArquivoCategorias arqCategorias = new ArquivoCategorias("categorias.db", "dados/arvoreCategoria.db");
             ArquivoRotulos arqRotulos = new ArquivoRotulos("rotulos.db", "dados/arvoreRotulos.db");
 
@@ -55,6 +55,7 @@ public class IO {
                             System.out.println("3 - Atualizar");
                             System.out.println("4 - Excluir");
                             System.out.println("5 - Buscar por Categoria");
+                            System.out.println("6 - Buscar por Rótulo");
                             System.out.println("0 - Sair");
                             try {
                                 op = Integer.parseInt(console.nextLine());
@@ -65,7 +66,7 @@ public class IO {
                            switch (op) {
                             case 1 -> {
                                 System.out.println("\nInserir nova tarefa:");
-                                Tarefa novaTarefa = criarTarefa(console, formatter, arqCategorias);
+                                Tarefa novaTarefa = criarTarefa(console, formatter, arqCategorias, arqRotulos);
                                 int idNovaTarefa = arqTarefas.create(novaTarefa);
                                 System.out.println("Tarefa inserida com ID: " + idNovaTarefa);
                             }
@@ -102,7 +103,7 @@ public class IO {
                                     System.out.println(t);
 
                                     System.out.println("\nAtualize os dados da tarefa:");
-                                    Tarefa tarefaAtualizada = criarTarefa(console, formatter, arqCategorias);
+                                    Tarefa tarefaAtualizada = criarTarefa(console, formatter, arqCategorias, arqRotulos);
                                     tarefaAtualizada.setId(idAtualizar);
                                     arqTarefas.update(tarefaAtualizada);
                                     System.out.println("Tarefa atualizada com sucesso!");
@@ -157,11 +158,32 @@ public class IO {
                                 buscarTarefas(idCategoria, arqTarefas);
                             }
 
+                            case 6 -> {
+                                System.out.println("\nDigite o rótulo que deseja buscar: ");
+                                ArrayList<Rotulo> rotulos = arqRotulos.listarRotulos();  // Lê todos os rótulos
+                                rotulos.sort(Comparator.comparing(Rotulo::getNome));  // Ordenar por nome
+                                for (int i = 0; i < rotulos.size(); i++) {
+                                    System.out.println((i + 1) + " - " + rotulos.get(i).getNome());
+                                }
+                                int escolhaRotulo;
+                                while (true) {
+                                    System.out.print("numero: ");
+                                    escolhaRotulo = Integer.parseInt(console.nextLine()) - 1;
+                                    if (escolhaRotulo >= 0 && escolhaRotulo < rotulos.size()) {
+                                        break;
+                                    }
+                                    System.out.println("Opção inválida. Tente novamente.");
+                                }
+                                int idRotulo = rotulos.get(escolhaRotulo).getId();
+                                buscarPorRotulo(idRotulo, arqTarefas);
+                            }
+
                             case 0 -> System.out.println("Voltando ao menu principal...");
                             
                             default -> System.out.println("Opção inválida! Selecione uma opção válida.");
                         }
                         } while (op != 0);
+                        
                         break;
 
                    case 2:
@@ -263,7 +285,7 @@ public class IO {
                             System.out.println("1 - Inserir");
                             System.out.println("2 - Buscar");
                             System.out.println("3 - Excluir");
-                            System.out.println("4 - Listar todas");
+                            System.out.println("4 - Listar todos");
                             System.out.println("0 - Sair");
                             try {
                                 opcao3 = Integer.parseInt(console.nextLine());
@@ -352,7 +374,7 @@ public class IO {
         }
     }
 
-        public static Tarefa criarTarefa(Scanner input, DateTimeFormatter formatter, ArquivoCategorias arqCategorias) throws Exception {
+        public static Tarefa criarTarefa(Scanner input, DateTimeFormatter formatter, ArquivoCategorias arqCategorias, ArquivoRotulos arqRotulos) throws Exception {
             System.out.print("Descrição: ");
             String descricao = input.nextLine();
 
@@ -389,7 +411,23 @@ public class IO {
 
             int idCategoria = categorias.get(escolhaCategoria).getId();
 
-            return new Tarefa(0, descricao, dataInicio, dataTermino, status, prioridade, idCategoria);
+            ArrayList<Rotulo> rotulos = arqRotulos.listarRotulos();  // Lê todos os rótulos
+            rotulos.sort(Comparator.comparing(Rotulo::getNome));  // Ordenar por nome
+            System.out.println("Rótulos:");
+            for (int i = 0; i < rotulos.size(); i++) {
+                System.out.println((i + 1) + " - " + rotulos.get(i).getNome());
+            }
+            ArrayList <Integer> idsRotulos = new ArrayList<>(); 
+            System.out.println("Digite os números dos rótulos (separados por enter) e 0 para terminar a escolha");
+            int escolhaR;
+            do {
+                escolhaR = Integer.parseInt(input.nextLine());
+                if (escolhaR != 0 && escolhaR > 0 && escolhaR <= rotulos.size()) {
+                    idsRotulos.add(escolhaR);
+                }
+            } while (escolhaR != 0 && escolhaR > 0 && escolhaR < rotulos.size());
+
+            return new Tarefa(0, descricao, dataInicio, dataTermino, status, prioridade, idCategoria, idsRotulos);
         }
 
         public static void buscarTarefas(int idCategoria, ArquivoTarefas arqTarefas) {
@@ -402,6 +440,24 @@ public class IO {
                 }
 
                 System.out.println("Tarefas associadas à categoria:");
+                for (Tarefa tarefa : tarefasAssociadas) {
+                    System.out.println(tarefa);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        public static void buscarPorRotulo(int idRotulo, ArquivoTarefas arqTarefas) {
+            try {
+                ArrayList<Tarefa> tarefasAssociadas = arqTarefas.buscarPorCategoria(idRotulo);
+
+                if (tarefasAssociadas.isEmpty()) {
+                    System.out.println("Nenhuma tarefa encontrada para este rótulo.");
+                    return;
+                }
+
+                System.out.println("Tarefas associadas ao rotulo:");
                 for (Tarefa tarefa : tarefasAssociadas) {
                     System.out.println(tarefa);
                 }

@@ -16,8 +16,8 @@ public class ParIdRotuloIdTarefa implements RegistroArvoreBMais<ParIdRotuloIdTar
     this(-1, -1);
   }
 
-  public ParIdRotuloIdTarefa(int idCategoria) {
-    this(idCategoria, -1);
+  public ParIdRotuloIdTarefa(int idRotulo) {
+    this(idRotulo, -1);
   }
 
   public ParIdRotuloIdTarefa(int idRotulo, int idTarefa) {
@@ -52,7 +52,7 @@ public class ParIdRotuloIdTarefa implements RegistroArvoreBMais<ParIdRotuloIdTar
 
   @Override
   public String toString() {
-    return "ID Categoria: " + this.idTarefa + ", ID Tarefa: " + this.idTarefa;
+    return "ID Rotulo: " + this.idRotulo + ", ID Tarefa: " + this.idTarefa;
   }
 
   @Override
