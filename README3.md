@@ -4,7 +4,7 @@
 Este terceiro TP de AEDS III se trata da implementação de um relacionamento N:N entre rótulos (classe nova) e tarefas (criada no TP I). Ele também conta com a implementação de uma busca por lista invertida, agora as tarefas podem ser procuradas por termos presentes nelas, categoria e rótulos relacionados.
 
 ### Dificuldades:
-Enfrentei dificuldades na lógica da implementação do relacionamento N:N. Eu implementei as árvores de forma tranquila, mas na hora de usar confesso que fiquei um pouco perdida e tentei de diversas formas até dar certo.
+Enfrentamos dificuldades na lógica da implementação do relacionamento N:N. Foi implementada as árvores de forma tranquila, mas na hora de usar confesso que ficamos um pouco perdidos e tentamos de diversas formas até dar certo. Também houve dificuldade em tirar a acentuação na pesquisa das tarefas usando a lista invertida, tentamos diferentes métodos para a busca não considerar a acentuação, mas não conseguimos, em virtude disso as palavras da pesquisa tem que ter a acentuação correta.
 
 ### Descrição dos Métodos:
 ***Arquivos*** \
@@ -63,6 +63,12 @@ Em relação a lista invertida, tem o método para carregar o arquivo de stop wo
 ***Arquivo Rótulos***
 Cria, atualiza, lê e exclui um rótulo. Tem o método para listar todos os rótulos e outro para buscá-los pelo nome.
 
+***Lista Invertida***
+**List<String> carregarStopwords(String tarefa)** - Faz uma lista das "stopwords" e tira elas da string.
+**float[] calcularFrequencia(List<String> palavrasFiltradas)** - Calcula a frequência de cada palavra do nome da tarefa.
+**public ElementoLista[] somarFrequencias(List<ElementoLista[]> resultados)** - Finaliza o cálculo do IDF.
+**public ElementoLista[] buscarTarefasPorFrase(String frase)** - Faz a busca usando a lista invertida.
+
 
 ### Perguntas
 **O índice invertido com os termos das tarefas foi criado usando a classe ListaInvertida?**\
@@ -81,7 +87,7 @@ Sim.
 Sim.
 
 **O trabalho está completo?**\
-.
+Sim.
 
 **O trabalho é original e não a cópia de um trabalho de um colega?**\
 Sim, o trabalho é original.
