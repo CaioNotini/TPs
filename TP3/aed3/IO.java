@@ -427,13 +427,15 @@ public class IO {
             }
             ArrayList <Integer> idsRotulos = new ArrayList<>(); 
             System.out.println("Digite os números dos rótulos (separados por enter) e 0 para terminar a escolha");
-            int escolhaR;
             do {
                 escolhaR = Integer.parseInt(input.nextLine());
                 if (escolhaR != 0 && escolhaR > 0 && escolhaR <= rotulos.size()) {
-                    idsRotulos.add(rotulos.get(escolhaR).getId());
+                    // Subtraia 1 para obter o índice correto
+                    idsRotulos.add(rotulos.get(escolhaR - 1).getId());
+                } else if (escolhaR != 0) {
+                    System.out.println("Número inválido. Tente novamente.");
                 }
-            } while (escolhaR != 0 && escolhaR > 0 && escolhaR < rotulos.size());
+            } while (escolhaR != 0);
 
             return new Tarefa(0, descricao, dataInicio, dataTermino, status, prioridade, idCategoria, idsRotulos);
         }
