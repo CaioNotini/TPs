@@ -63,6 +63,10 @@ public class Tarefa implements Registro {
         return this.listaRotulos;
     }
 
+    public void removeRotulo (int idRotulo) {
+        listaRotulos.remove(idRotulo);
+    }
+
     public byte[] toByteArray() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);

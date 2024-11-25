@@ -227,6 +227,22 @@ public class ArquivoTarefas extends Arquivos<Tarefa> {
     Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
     return pattern.matcher(nfdNormalizedString).replaceAll("").toLowerCase();
   }
+
+  public void excluiRotulo(int idRotulo) throws Exception {
+
+    //recuperar tarefas
+    List<ParIdRotuloIdTarefa> pares = arvoreR.read(new ParIdRotuloIdTarefa(idRotulo, -1)); // Busca pelo prefixo do idRotulo
+
+    for (ParIdRotuloIdTarefa par : pares) {
+        if (par.getIdRotulo() == idRotulo) {
+            Tarefa tarefaAssociada = read(par.getIdTarefa());
+            tarefaAssociada.removeRotulo(idRotulo);
+        }
+    }
+    arvoreR.delete(new ParIdRotuloIdTarefa(idRotulo, -1));
+    arvoreT.delete(new ParIdTarefaIdRotulo(-1, idRotulo));
+
+}
     
     
 }

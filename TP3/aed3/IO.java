@@ -339,7 +339,9 @@ public class IO {
                                     }
 
                                     int id = rotulos.get(escolhaRotulo).getId();
+                                    arqTarefas.excluiRotulo(id);
                                     boolean excluida = arqRotulos.delete(id);
+                                    
                                     if (excluida) {
                                         System.out.println("Rótulo excluído com sucesso!");
                                     } else {
@@ -423,7 +425,7 @@ public class IO {
             do {
                 escolhaR = Integer.parseInt(input.nextLine());
                 if (escolhaR != 0 && escolhaR > 0 && escolhaR <= rotulos.size()) {
-                    idsRotulos.add(escolhaR);
+                    idsRotulos.add(rotulos.get(escolhaR).getId());
                 }
             } while (escolhaR != 0 && escolhaR > 0 && escolhaR < rotulos.size());
 
@@ -450,7 +452,7 @@ public class IO {
 
         public static void buscarPorRotulo(int idRotulo, ArquivoTarefas arqTarefas) {
             try {
-                ArrayList<Tarefa> tarefasAssociadas = arqTarefas.buscarPorCategoria(idRotulo);
+                ArrayList<Tarefa> tarefasAssociadas = arqTarefas.buscarPorRotulo(idRotulo);
 
                 if (tarefasAssociadas.isEmpty()) {
                     System.out.println("Nenhuma tarefa encontrada para este rótulo.");
