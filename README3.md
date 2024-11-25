@@ -1,4 +1,3 @@
-
 # To Do List - Grupo 3
 #### Grupo: Caio de Castro Notini, Lívia Alves Ferreira e Luigi Louback de Oliveira
 
@@ -42,13 +41,27 @@ Enfrentei dificuldades na lógica da implementação do relacionamento N:N. Eu i
 **public Tarefa(String n, LocalDate dCri, LocalDate dCon, String s, int p, int idCategoria):** construtor. \
 **public Tarefa(int i, String n, LocalDate criacao, LocalDate conclusao, String s, int p, int idCategoria):** construtor.
 
-*Novos Métodos* \
 ***Categoria*** \
 **public Categoria():** construtor. \
 **public Categoria(String n):** construtor. \
-**public Categoria(int i, String n):** construtor. \
+**public Categoria(int i, String n):** construtor. 
 
-***ArvoreBMais*** \
+*Novos Métodos* \
+***Rótulo*** \
+Semelhante ao categoria, possui construtores, toString(). 
+
+***ParIdRotuloIdTarefa e ParIdTarefaIdRotulo***
+Classes semlhantes a ParIdId, que herdam da árvore B+. A única diferença é que ela implementa pares de informações diferentes, uma em relação ao rótulo e o outro em relação a tarefa.
+
+***Acréscimo em tarefa***
+Adicionei um array List de IDs na classe tarefa para ficar mais fácil de puxar as tarefas relacionadas.
+
+***Acréscimo no arquivo de tarefas***
+Acrécimo da busca por rótulo que busca tarefas relacionadas a um rótulo na árvore de rótulos. Exclui rótulo para excluir os pares de ids da árvore de rótulos e da árvores de tarefas quando um rótulo é excluído. /
+Em relação a lista invertida, tem o método para carregar o arquivo de stop words no projeto, calcular a frequência delas e no fim fazer o cálculo da frequência.
+
+***Arquivo Rótulos***
+Cria, atualiza, lê e exclui um rótulo. Tem o método para listar todos os rótulos e outro para buscá-los pelo nome.
 
 
 ### Perguntas
@@ -56,6 +69,7 @@ Enfrentei dificuldades na lógica da implementação do relacionamento N:N. Eu i
 Sim. 
 
 **O CRUD de rótulos foi implementado?**\
+Sim.
 
 **No arquivo de tarefas, os rótulos são incluídos, alterados e excluídos em uma árvore B+?**\
 Sim.
@@ -67,5 +81,7 @@ Sim.
 Sim.
 
 **O trabalho está completo?**\
+.
+
 **O trabalho é original e não a cópia de um trabalho de um colega?**\
 Sim, o trabalho é original.
