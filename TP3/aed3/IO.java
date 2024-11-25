@@ -1,12 +1,14 @@
 package aed3;
 
 import java.io.File;
+import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 
 public class IO {
@@ -75,9 +77,12 @@ public class IO {
                                 System.out.println("\nBuscar tarefa por termos relacionados:");
                                 System.out.print("Digite uma tarefa: ");
                                 String chave = console.nextLine();
+                               // String nfdNormalizedString = Normalizer.normalize(chave, Normalizer.Form.NFD);
+                               // Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+                               // chave= pattern.matcher(nfdNormalizedString).replaceAll("").toLowerCase();
                               
                                 ElementoLista[]resultadoFinal=arqTarefas.buscarTarefasPorFrase(chave);
-                                 Arrays.sort(resultadoFinal, (e1, e2) -> Float.compare(e2.getFrequencia(), e1.getFrequencia()));
+                                 Arrays.sort(resultadoFinal, (e1, e2) -> Float.compare(e1.getFrequencia(), e2.getFrequencia()));
                                 for(int i=0;i<resultadoFinal.length && i<10;i++){
                                     if(resultadoFinal[i]!=null){
                                         int idBuscar=resultadoFinal[i].getId();
@@ -149,6 +154,7 @@ public class IO {
                                     if (escolhaCategoria >= 0 && escolhaCategoria < categorias.size()) {
                                         break;
                                     }
+
                                     System.out.println("Opção inválida. Tente novamente.");
                                 }
 

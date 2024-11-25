@@ -45,7 +45,7 @@ public class ArquivoTarefas extends Arquivos<Tarefa> {
         
          for(int i=0;i<frequenciaPalavras.length;i++){
 
-             lista.create(listaPalavras.get(i), new ElementoLista(id, frequenciaPalavras[i]));
+             lista.create(transforma(listaPalavras.get(i)), new ElementoLista(id, frequenciaPalavras[i]));
           //   System.out.println("elemento criado: "+listaPalavras.get(i)+" frequencia: "+frequenciaPalavras[i]);
             }
         lista.incrementaEntidades();
@@ -222,6 +222,7 @@ public class ArquivoTarefas extends Arquivos<Tarefa> {
         Collections.sort(resultadoFinal);
         return resultadoFinal.toArray(new ElementoLista[0]);
     }
+
      public static String transforma(String str) {
     String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
     Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
