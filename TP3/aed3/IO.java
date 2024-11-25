@@ -449,7 +449,7 @@ public class IO {
                 e.printStackTrace();
             }
         }
-
+        //teste
         public static void buscarPorRotulo(int idRotulo, ArquivoTarefas arqTarefas) {
             try {
                 ArrayList<Tarefa> tarefasAssociadas = arqTarefas.buscarPorRotulo(idRotulo);

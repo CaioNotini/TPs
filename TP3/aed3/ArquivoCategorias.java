@@ -10,8 +10,6 @@ public class ArquivoCategorias extends Arquivos<Categoria> {
         arvore = new ArvoreBMais<>(ParNomeId.class.getConstructor(), 5, nomeArvore);
     }
 
-
-
     public int create(Categoria categoria) throws Exception {
         int id = super.create(categoria); 
         categoria.setId(id);
