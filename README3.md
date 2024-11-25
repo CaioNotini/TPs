@@ -63,10 +63,10 @@ Em relação a lista invertida, tem o método para carregar o arquivo de stop wo
 ***Arquivo Rótulos***
 Cria, atualiza, lê e exclui um rótulo. Tem o método para listar todos os rótulos e outro para buscá-los pelo nome.
 
-***Lista Invertida***
-**List<String> carregarStopwords(String tarefa)** - Faz uma lista das "stopwords" e tira elas da string.
-**float[] calcularFrequencia(List<String> palavrasFiltradas)** - Calcula a frequência de cada palavra do nome da tarefa.
-**public ElementoLista[] somarFrequencias(List<ElementoLista[]> resultados)** - Finaliza o cálculo do IDF.
+***Lista Invertida***\
+**List<String> carregarStopwords(String tarefa)** - Faz uma lista das "stopwords" e tira elas da string.\
+**float[] calcularFrequencia(List<String> palavrasFiltradas)** - Calcula a frequência de cada palavra do nome da tarefa.\
+**public ElementoLista[] somarFrequencias(List<ElementoLista[]> resultados)** - Finaliza o cálculo do IDF.\
 **public ElementoLista[] buscarTarefasPorFrase(String frase)** - Faz a busca usando a lista invertida.
 
 
