@@ -1,3 +1,7 @@
+package aed3;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 /**
  *  A classe {@code LZW} codifica e decodifica uma string usando uma sequência
  *  de índices. Esses índices são armazenados na forma de uma sequência de bits,
@@ -10,51 +14,72 @@
  *  PUC Minas
  */
 import java.util.ArrayList;
+import java.util.List;
 
 public class LZW {
 
     public static final int BITS_POR_INDICE = 12; // Mínimo de 9 bits por índice (512 itens no dicionário)
 
-    public static void main(String[] args) {
 
+       public static void compactarArquivos(List<String> filePaths, String backupFolderPath) throws Exception {
         try {
+            // Caminho do arquivo de backup
+            String backupFilePath = backupFolderPath + "/backup.db";
 
-            // Codificação
-            String msg = "O sabiá não sabia que o sábio sabia que o sabiá não sabia assobiar.";
-            byte[] msgBytes = msg.getBytes();
-            byte[] msgCodificada = codifica(msgBytes); // Vetor de bits que contém os índices
-
-            // Cria uma cópia dos índices, como se fosse uma leitura em um arquivo
-            // Assim, para armazenar o vetor em um arquivo, basta armazenar o vetor de bytes
-            byte[] copiaMsgCodificada = (byte[]) msgCodificada.clone();
-
-            // Decodificação - Cria uma nova string
-            byte[] msgBytes2 = decodifica(copiaMsgCodificada);
-            String msg2 = new String(msgBytes2);
-
-            // Relatório
-            int i;
-
-            System.out.println("\nMensagem já decodificada: ");
-            System.out.println(msg2);
-
-            System.out.println("\nBytes originais (" + msgBytes.length + "): ");
-            for (i = 0; i < msgBytes.length; i++) {
-                System.out.print(msgBytes[i] + " ");
+            // Certifica-se de que a pasta de backup existe
+            File backupFolder = new File(backupFolderPath);
+            if (!backupFolder.exists()) {
+                backupFolder.mkdirs();
             }
-            System.out.println();
 
-            System.out.println("\nBytes compactados (" + msgCodificada.length + "): ");
-            for (i=0; i < msgCodificada.length; i++)
-                System.out.print(msgCodificada[i] + " ");
-            System.out.println();
+            // Abre o arquivo de backup no modo leitura/escrita
+            try (RandomAccessFile backupFile = new RandomAccessFile(backupFilePath, "rw")) {
+                // Move o ponteiro para o final do arquivo
+                backupFile.seek(backupFile.length());
 
-            System.out.println("Eficiência: " + (100 * (1 - (float) msgCodificada.length / (float) msgBytes.length)) + "%");
+                // Itera sobre todos os arquivos a serem compactados
+                for (String originalFilePath : filePaths) {
+                    // Lê o arquivo original como bytes
+                    byte[] arquivoEmBytes = LZW.readFileToByteArray(originalFilePath);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+                    // Compacta os bytes usando o algoritmo LZW
+                    byte[] msgCodificada = LZW.codifica(arquivoEmBytes);
+
+                    // Nome do arquivo original
+                    String nomeArquivo = new File(originalFilePath).getName();
+
+                    // Escreve os dados do arquivo no backup
+                    byte[] nomeArquivoBytes = nomeArquivo.getBytes("UTF-8");
+                    backupFile.writeInt(nomeArquivoBytes.length); // Tamanho do nome
+                    backupFile.write(nomeArquivoBytes); // Nome do arquivo
+                    backupFile.writeInt(msgCodificada.length); // Tamanho do vetor compactado
+                    backupFile.write(msgCodificada); // Vetor compactado
+
+                    System.out.println("Arquivo " + nomeArquivo + " compactado e adicionado ao backup.");
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Erro durante o processo de compactação: " + e.getMessage());
+        }
+    }
+
+       public static byte[] readFileToByteArray(String filePath) throws IOException {
+        File file = new File(filePath);
+
+        // Verifica se o arquivo existe
+        if (!file.exists()) {
+            throw new IOException("Arquivo não encontrado: " + filePath);
         }
 
+        // Cria o array de bytes para armazenar o conteúdo do arquivo
+        byte[] byteArray = new byte[(int) file.length()];
+
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
+            // Lê o arquivo byte por byte
+            randomAccessFile.readFully(byteArray);
+        }
+
+        return byteArray;
     }
 
     // CODIFICAÇÃO POR LZW

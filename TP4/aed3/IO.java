@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -38,6 +39,7 @@ public class IO {
                 System.out.println("1 - Tarefa");
                 System.out.println("2 - Categoria");
                 System.out.println("3 - Rótulo");
+                System.out.println("4 - Compactar");
                 System.out.println("0 - Sair");
                 try {
                     opcao = Integer.parseInt(console.nextLine());
@@ -365,6 +367,34 @@ public class IO {
 
                         } while(opcao3 != 0);
                     break;
+                    case 4:
+                    System.out.println("compactando arquivos...");
+                    List<String> arquivosParaCompactar = List.of(
+                        "dados/tarefas.db.db",
+                        "dados/tarefas.db.hash_c.db",
+                        "dados/tarefas.db.hash_d.db",
+                        "dados/rotulos.db.hash_d.db",
+                        "dados/rotulos.db.hash_c.db",
+                        "dados/categorias.db.db",
+                        "dados/blocos.listainv.db",
+                        "dados/dicionario.listainv.db",
+                        "dados/categorias.db.hash_d.db",
+                        "dados/categorias.db.hash_c.db",
+                        "dados/arvoreTR",
+                        "dados/arvoreTarefas.db",
+                        "dados/arvoreRT",
+                        "dados/arvoreRotulos.db",
+                        "dados/arvoreCategoria.db"
+                        
+                    );
+                     LZW.compactarArquivos(arquivosParaCompactar, "arquivoCompactado");
+                     
+                  
+                     
+         
+                    
+                    break;
+
 
                     case 0:
                         System.out.println("Encerrando o programa...");
@@ -427,8 +457,9 @@ public class IO {
             }
             ArrayList <Integer> idsRotulos = new ArrayList<>(); 
             System.out.println("Digite os números dos rótulos (separados por enter) e 0 para terminar a escolha");
-            do {
-                escolhaR = Integer.parseInt(input.nextLine());
+            int escolhaR;
+                        do {
+                            escolhaR = Integer.parseInt(input.nextLine());
                 if (escolhaR != 0 && escolhaR > 0 && escolhaR <= rotulos.size()) {
                     // Subtraia 1 para obter o índice correto
                     idsRotulos.add(rotulos.get(escolhaR - 1).getId());
