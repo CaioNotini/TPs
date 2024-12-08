@@ -1,7 +1,6 @@
 package aed3;
 
 import java.io.File;
-import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -9,7 +8,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 
 public class IO {
@@ -40,9 +38,10 @@ public class IO {
                 System.out.println("2 - Categoria");
                 System.out.println("3 - Rótulo");
                 System.out.println("4 - Compactar");
+                System.out.println("5 - Descompactar");
                 System.out.println("0 - Sair");
                 try {
-                    opcao = Integer.parseInt(console.nextLine());
+                    opcao = Integer.parseInt(console.next());
                 } catch (NumberFormatException e) {
                     opcao = -1;
                 }
@@ -390,10 +389,20 @@ public class IO {
                      LZW.compactarArquivos(arquivosParaCompactar, "arquivoCompactado");
                      
                   
-                     
-         
-                    
                     break;
+
+                    case 5: 
+                        try {
+                            String backupFolderPath = "TP4/arquivoCompactado";
+                            String outputFolderPath = "TP4/arquivoDescompactado";
+                    
+                            GerenciadorDeBackups.listarEEscolherDescompactacao(backupFolderPath, outputFolderPath);
+                    
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    break;
+                    
 
 
                     case 0:
@@ -506,5 +515,5 @@ public class IO {
                 e.printStackTrace();
             }
         }
-    }
+}
 

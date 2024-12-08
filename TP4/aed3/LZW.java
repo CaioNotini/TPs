@@ -3,20 +3,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-/**
- *  A classe {@code LZW} codifica e decodifica uma string usando uma sequência
- *  de índices. Esses índices são armazenados na forma de uma sequência de bits,
- *  com o apoio da classe VetorDeBits.
- * 
- *  A codificação não é exatamente de caracteres (Unicode), mas dos bytes que
- *  representam esses caracteres.
- *  
- *  @author Marcos Kutova
- *  PUC Minas
- */
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class LZW {
@@ -268,5 +256,49 @@ public class LZW {
 
         return msgVetorBytes;
     }
+
+    public static void descompactarArquivos(String backupFilePath, String outputFolderPath) throws Exception {
+        try {
+            // Certifica-se de que a pasta de saída existe
+            File outputFolder = new File(outputFolderPath);
+            if (!outputFolder.exists()) {
+                outputFolder.mkdirs();
+            }
+    
+            // Abre o arquivo de backup no modo leitura
+            try (RandomAccessFile backupFile = new RandomAccessFile(backupFilePath, "r")) {
+                // Enquanto houver dados no arquivo de backup
+                while (backupFile.getFilePointer() < backupFile.length()) {
+                    // Lê o tamanho do nome do arquivo
+                    int nomeArquivoLength = backupFile.readInt();
+    
+                    // Lê o nome do arquivo
+                    byte[] nomeArquivoBytes = new byte[nomeArquivoLength];
+                    backupFile.readFully(nomeArquivoBytes);
+                    String nomeArquivo = new String(nomeArquivoBytes, "UTF-8");
+    
+                    // Lê o tamanho dos dados compactados
+                    int dadosCompactadosLength = backupFile.readInt();
+    
+                    // Lê os dados compactados
+                    byte[] dadosCompactados = new byte[dadosCompactadosLength];
+                    backupFile.readFully(dadosCompactados);
+    
+                    // Decodifica os dados compactados
+                    byte[] dadosOriginal = LZW.decodifica(dadosCompactados);
+    
+                    // Salva os dados descompactados como um novo arquivo
+                    File outputFile = new File(outputFolderPath, nomeArquivo);
+                    try (RandomAccessFile outputFileWriter = new RandomAccessFile(outputFile, "rw")) {
+                        outputFileWriter.write(dadosOriginal);
+                    }
+    
+                    System.out.println("Arquivo " + nomeArquivo + " descompactado e salvo em: " + outputFile.getAbsolutePath());
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Erro durante o processo de descompactação: " + e.getMessage());
+        }
+    }    
 
 }
