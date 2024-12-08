@@ -2,6 +2,9 @@ package aed3;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.text.SimpleDateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 /**
  *  A classe {@code LZW} codifica e decodifica uma string usando uma sequência
  *  de índices. Esses índices são armazenados na forma de uma sequência de bits,
@@ -24,7 +27,10 @@ public class LZW {
        public static void compactarArquivos(List<String> filePaths, String backupFolderPath) throws Exception {
         try {
             // Caminho do arquivo de backup
-            String backupFilePath = backupFolderPath + "/backup.db";
+            String dataAtual = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+           String backupFileName = "backup_" + dataAtual + ".db";
+           String backupFilePath = backupFolderPath + "/" + backupFileName;
+           
 
             // Certifica-se de que a pasta de backup existe
             File backupFolder = new File(backupFolderPath);
