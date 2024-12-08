@@ -71,21 +71,31 @@ Cria, atualiza, lê e exclui um rótulo. Tem o método para listar todos os rót
 **public ElementoLista[] somarFrequencias(List<ElementoLista[]> resultados)** - Finaliza o cálculo do IDF.\
 **public ElementoLista[] buscarTarefasPorFrase(String frase)** - Faz a busca usando a lista invertida.
 
+***Novos***\
+***Gerenciador de Backups***\
+**listarBackupsNaPasta(String backupFolderPath):** recebe uma pasta e lista os arquivos presentes nela. \
+**listarEEscolherDescompactacao(String backupFolderPath, String outputFolderPath):** chama o método de listar, pede para o usuário escolher um backup e chama o algoritmo de descompactação. \
+**compactarArquivos(List<String> filePaths, String backupFolderPath):** compacta uma lista de arquivos usando o algoritmo LZW e salva os dados compactados em um único arquivo de backup. \
+**readFileToByteArray(String filePath):** lê o conteúdo de um arquivo e o retorna como um vetor de bytes. \
+**codifica(byte[] msgBytes):** compacta um vetor de bytes usando o algoritmo LZW. \
+**decodifica(byte[] msgCodificada):** descompacta um vetor de bytes codificado pelo algoritmo LZW. \
+**descompactarArquivos(String backupFilePath, String outputFolderPath):** lê um arquivo de backup contendo múltiplos arquivos compactados e descompacta cada um. \
+
 
 ### Perguntas
-**O índice invertido com os termos das tarefas foi criado usando a classe ListaInvertida?**\
-Sim. 
-
-**O CRUD de rótulos foi implementado?**\
+**Há uma rotina de compactação usando o algoritmo LZW para fazer backup dos arquivos?**\
 Sim.
 
-**No arquivo de tarefas, os rótulos são incluídos, alterados e excluídos em uma árvore B+?**\
+**Há uma rotina de descompactação usando o algoritmo LZW para recuperação dos arquivos?**\
 Sim.
 
-**É possível buscar tarefas por palavras usando o índice invertido?**\
+**O usuário pode escolher a versão a recuperar?**\
 Sim.
 
-**É possível buscar tarefas por rótulos usando uma árvore B+? **\
+**Qual foi a taxa de compressão alcançada por esse backup? (Compare o tamanho dos arquivos compactados com os arquivos originais)**
+
+
+**O trabalho está funcionando corretamente?**\
 Sim.
 
 **O trabalho está completo?**\
