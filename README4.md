@@ -5,9 +5,6 @@ Este quarto trabalho prático de AEDS III consiste na criação de um sistema pa
 
 O sistema também implementa uma rotina de recuperação (descompactação) dos backups, permitindo ao usuário selecionar a versão desejada para restaurar. O objetivo é fornecer uma solução eficiente para arquivamento e recuperação, utilizando fluxos de bytes para minimizar o uso de memória.
 
-### Dificuldades:
-
-
 ### Descrição dos Métodos:
 ***Arquivos*** \
 **Arquivos(String n, Constructor<T> c):** construtor da classe.\
@@ -73,7 +70,7 @@ Cria, atualiza, lê e exclui um rótulo. Tem o método para listar todos os rót
 ***Novos***\
 ***Gerenciador de Backups***\
 **listarBackupsNaPasta(String backupFolderPath):** recebe uma pasta e lista os arquivos presentes nela. \
-**listarEEscolherDescompactacao(String backupFolderPath, String outputFolderPath):** chama o método de listar, pede para o usuário escolher um backup e chama o algoritmo de descompactação. \
+**listarEEscolherDescompactacao(String backupFolderPath, String outputFolderPath):** chama o método de listar, pede para o usuário escolher um backup e chama o algoritmo de descompactação. 
 
 ***LZW***\
 **compactarArquivos(List<String> filePaths, String backupFolderPath):** compacta uma lista de arquivos usando o algoritmo LZW e salva os dados compactados em um único arquivo de backup. \
