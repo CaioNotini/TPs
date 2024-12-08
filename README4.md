@@ -91,7 +91,7 @@ Sim.
 Sim.
 
 **Qual foi a taxa de compressão alcançada por esse backup? (Compare o tamanho dos arquivos compactados com os arquivos originais)**
-
+A soma dos arquivos originais foi de 16KB para 2KB.
 
 **O trabalho está funcionando corretamente?**\
 Sim.
